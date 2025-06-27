@@ -1,0 +1,27 @@
+services:
+  mysql:
+    image: mysql:8.0
+    command: '--default-authentication-plugin=mysql_native_password'
+    container_name: mysql-curso
+    environment: 
+      - MYSQL_ROOT_PASSWORD=abc123
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=def456
+    expose:
+      - 3306
+      - 33060
+    restart: always
+  wordpress: 
+    depends_on:
+      - mysql
+    image: wordpress:curso-docker
+    build: ./wordpress
+    environment:
+      - WORDPRESS_DB_HOST=mysql
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_PASSWORD=def456
+      - WORDPRESS_DB_NAME=wordpress
+    ports:
+      - 9000:80
+    restart: always
